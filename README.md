@@ -15,3 +15,5 @@ yarn start
 - Typescript
 - MirageJs
 - Axios
+- React-modal
+- Polished
