@@ -13,3 +13,5 @@ yarn start
 ## ⚙️ Tools
 - Create react-app
 - Typescript
+- MirageJs
+- Axios
