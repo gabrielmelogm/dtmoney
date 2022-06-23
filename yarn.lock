@@ -1839,6 +1839,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/form-serialize@^0.7.2":
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/@types/form-serialize/-/form-serialize-0.7.2.tgz#6995e5541f6e1d4770c6e6bb7b226db6220984b9"
+  integrity sha512-DOHz5r47gNIcA6bsKjMV7G/Bgs3FFTQBFCHw95D0+5bANYIjazCmrOCTnGhtgIKeg0dJGhKlnT0WOkS2HdeqXQ==
+
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@types/graceful-fs/-/graceful-fs-4.1.5.tgz#21ffba0d98da4350db64891f92a9e5db3cdb4e15"
