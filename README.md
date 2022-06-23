@@ -3,7 +3,9 @@
   <b>Segundo projeto do ignite na trilha react</b>
   <img src="/public/readme-example.gif" alt="Gif de exemplo" width="500px"/>
 </div>
-<span align="center">Projeto bem simples e pequeno de gerenciamento de finanças</span>
+<div align="center">
+  <span align="center">Projeto bem simples e pequeno de gerenciamento de finanças</span>
+</div>
 
 ## 🏁 HOW to run
 ```bash
