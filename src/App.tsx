@@ -11,7 +11,7 @@ Modal.setAppElement("#root")
 
 export function App() {
   const [ isNewTransactionModalOpen, setIsNewTransactionModalOpen ] = useState(false)
-  const [ logIn, setLogIn ] = useState(true)
+  const [ logIn, setLogIn ] = useState(false)
 
   function handleOpenNewTransactionModal() {
     setIsNewTransactionModalOpen(true)
