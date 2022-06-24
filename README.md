@@ -17,6 +17,7 @@ yarn start
 - Styled-components
 
 ## ⚙️ Tools
+- Firebase
 - Create react-app
 - Typescript
 - MirageJs
