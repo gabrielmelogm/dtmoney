@@ -1,4 +1,5 @@
 import * as firebase from "firebase/app"
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 
 firebase.initializeApp({
   apiKey: process.env.REACT_APP_API_KEY,
@@ -9,4 +10,8 @@ firebase.initializeApp({
   appId: process.env.REACT_APP_APP_ID,
 })
 
-export { firebase }
+function requireAuth() {
+  return { getAuth, GoogleAuthProvider, signInWithPopup }
+}
+
+export { firebase, requireAuth }
