@@ -1,32 +1,11 @@
 import { Container } from "./styles";
-import { requireAuth } from "../../firebase";
 
 import logoImg from "../../assets/logo-only.svg"
 import googleImg from "../../assets/logo-google.svg"
 import githubImg from "../../assets/logo-github.svg"
+import { LogInWithGoogle } from "../../services/authentication";
 
 export function Login() {
-
-  async function handleLogIn() {
-    const { GoogleAuthProvider, getAuth, signInWithPopup } = requireAuth()
-
-    const provider = new GoogleAuthProvider()
-    const auth = getAuth()
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result)
-        const token = credential?.accessToken
-        const user = result.user
-        console.log(token, user)
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log(errorCode, errorMessage, email, credential)
-      })
-  }
 
   return (
     <Container>
@@ -39,7 +18,7 @@ export function Login() {
           <h2>Login</h2>
           <h3>Escolha como fazer login</h3>
           <div className="content-button">
-            <button onClick={handleLogIn}>
+            <button onClick={LogInWithGoogle}>
               <img src={googleImg} alt="Logo google" />
               <span>Entrar com Google</span>
             </button>
