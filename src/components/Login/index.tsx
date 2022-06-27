@@ -3,9 +3,10 @@ import { Container } from "./styles";
 import logoImg from "../../assets/logo-only.svg"
 import googleImg from "../../assets/logo-google.svg"
 import githubImg from "../../assets/logo-github.svg"
-import { LogInWithGitHub, LogInWithGoogle } from "../../hooks/useAuthentication";
+import { useAuthentication } from "../../hooks/useAuthentication";
 
 export function Login() {
+  const { LogInWithGoogle, LogInWithGitHub } = useAuthentication()
 
   return (
     <Container>
