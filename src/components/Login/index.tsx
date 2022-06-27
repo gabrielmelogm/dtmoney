@@ -3,7 +3,7 @@ import { Container } from "./styles";
 import logoImg from "../../assets/logo-only.svg"
 import googleImg from "../../assets/logo-google.svg"
 import githubImg from "../../assets/logo-github.svg"
-import { LogInWithGoogle } from "../../services/authentication";
+import { LogInWithGitHub, LogInWithGoogle } from "../../hooks/useAuthentication";
 
 export function Login() {
 
@@ -22,7 +22,7 @@ export function Login() {
               <img src={googleImg} alt="Logo google" />
               <span>Entrar com Google</span>
             </button>
-            <button>
+            <button onClick={LogInWithGitHub}>
               <img src={githubImg} alt="Logo github" />
               <span>Entrar com GitHub</span>
             </button>

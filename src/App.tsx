@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { Dashboard } from "./components/Dashboard";
 import { Header } from "./components/Header";
 import { Login } from "./components/Login";
 import { NewTransactionModal } from "./components/NewTransactionModal";
 import { TransactionsProvider } from "./hooks/useTransactions";
+import { isLogin } from "./hooks/useAuthentication";
 import { GlobalStyle } from "./styles/global";
 
 Modal.setAppElement("#root")
@@ -20,6 +21,10 @@ export function App() {
   function handleCloseNewTransactionModal() {
     setIsNewTransactionModalOpen(false)
   }
+
+  useEffect(() => {
+    setLogIn(isLogin())
+  },[])
 
   return (
     <TransactionsProvider>
