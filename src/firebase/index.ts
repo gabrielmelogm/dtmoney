@@ -4,9 +4,10 @@ import {
   GithubAuthProvider,
   signInWithPopup,
   getAuth,
+  onAuthStateChanged,
 } from "firebase/auth"
 
-firebase.initializeApp({
+const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
   projectId: process.env.REACT_APP_PROJECT_ID,
@@ -20,5 +21,6 @@ const auth = {
   GithubAuthProvider,
   signInWithPopup,
   getAuth,
+  onAuthStateChanged,
 }
 export { firebase, auth }

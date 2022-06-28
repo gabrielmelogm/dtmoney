@@ -23,7 +23,6 @@ export function AuthenticationProvider({children}: AuthenticationProviderProps) 
     auth.signInWithPopup(authProps, provider).then((res) => {
       const credential = auth.GoogleAuthProvider.credentialFromResult(res)
       const user = res.user
-      localStorage.setItem("token", `${credential?.accessToken}`)
       setIsLogin(true)
       return user
     })
@@ -35,19 +34,22 @@ export function AuthenticationProvider({children}: AuthenticationProviderProps) 
     auth.signInWithPopup(authProps, provider).then((res) => {
       const credential = auth.GithubAuthProvider.credentialFromResult(res)
       const user = res.user
-      localStorage.setItem("token", `${credential?.accessToken}`)
       setIsLogin(true)
       return user
     })
   }
   
-  function verifyIsLogin() {
-    const token = localStorage.getItem("token")
-    if (token) {
-      return setIsLogin(true)
-    } else {
+  async function verifyIsLogin() {
+    try {
+      const getUser = await new Promise((resolve) => auth.onAuthStateChanged(auth.getAuth(), (user) => resolve(user)))
+      if (getUser) {
+        return setIsLogin(true)
+      } else {
+        return setIsLogin(false)
+      }
+    } catch (error) {
       return setIsLogin(false)
-    }
+    } 
   }
 
   useEffect(() => {

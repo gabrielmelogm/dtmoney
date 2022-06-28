@@ -86,13 +86,15 @@ export const Container = styled.div`
 
       img {
         position: absolute;
+        max-width: 750px;
+        width: 100%;
         top: 6rem;
         right: -1rem;
       }
 
       p {
         display: inline-block;
-        margin-top: 12rem;
+        margin-top: 13rem;
         font-size: 3rem;
         font-weight: 700;
         color: var(--shape);

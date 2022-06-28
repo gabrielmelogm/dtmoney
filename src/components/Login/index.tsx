@@ -4,9 +4,18 @@ import logoImg from "../../assets/logo-only.svg"
 import googleImg from "../../assets/logo-google.svg"
 import githubImg from "../../assets/logo-github.svg"
 import { useAuthentication } from "../../hooks/useAuthentication";
+import { useEffect, useState } from "react";
 
-export function Login() {
-  const { LogInWithGoogle, LogInWithGitHub } = useAuthentication()
+type LoginProps = {
+  setLogIn: (value: boolean) => void
+}
+
+export function Login({ setLogIn }: LoginProps) {
+  const { LogInWithGoogle, LogInWithGitHub, isLogin } = useAuthentication()
+
+  useEffect(() => {
+    setLogIn(isLogin)
+  }, [isLogin])
 
   return (
     <Container>
