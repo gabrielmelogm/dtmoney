@@ -36,7 +36,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
       const itemId = response.id
       const itemData = response.data()
       itemData.id = itemId
-      data.push(itemData)
+      if (itemData.userEmail === `${auth.getAuth().currentUser?.email}`) return data.push(itemData)
     })
     setTransactions(data)
   }
