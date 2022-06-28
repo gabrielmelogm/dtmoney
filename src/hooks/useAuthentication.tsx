@@ -2,8 +2,8 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 import { auth } from "../firebase"
 
 type AuthenticationProps = {
-  LogInWithGoogle: () => Promise<string>
-  LogInWithGitHub: () => Promise<string>
+  LogInWithGoogle: () => Promise<void>
+  LogInWithGitHub: () => Promise<void>
   isLogin: boolean
 }
 
@@ -11,7 +11,7 @@ type AuthenticationProviderProps = {
   children: ReactNode
 }
 
-const Authentication = createContext<AuthenticationProps>(AuthenticationProvider)
+const Authentication = createContext({} as AuthenticationProps)
 
 export function AuthenticationProvider({children}: AuthenticationProviderProps) {
   const [ isLogin, setIsLogin ] = useState(false)
@@ -24,6 +24,7 @@ export function AuthenticationProvider({children}: AuthenticationProviderProps) 
       const credential = auth.GoogleAuthProvider.credentialFromResult(res)
       const user = res.user
       localStorage.setItem("token", `${credential?.accessToken}`)
+      setIsLogin(true)
       return user
     })
   }
@@ -35,13 +36,14 @@ export function AuthenticationProvider({children}: AuthenticationProviderProps) 
       const credential = auth.GithubAuthProvider.credentialFromResult(res)
       const user = res.user
       localStorage.setItem("token", `${credential?.accessToken}`)
+      setIsLogin(true)
       return user
     })
   }
   
   function verifyIsLogin() {
-    const isLogin = localStorage.getItem("token")
-    if (isLogin) {
+    const token = localStorage.getItem("token")
+    if (token) {
       return setIsLogin(true)
     } else {
       return setIsLogin(false)
@@ -50,7 +52,7 @@ export function AuthenticationProvider({children}: AuthenticationProviderProps) 
 
   useEffect(() => {
     verifyIsLogin()
-  },[])
+  }, [])
 
   return (
     <Authentication.Provider value={{ LogInWithGoogle, LogInWithGitHub, isLogin }}>
