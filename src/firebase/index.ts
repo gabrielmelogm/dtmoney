@@ -6,6 +6,7 @@ import {
   getAuth,
   onAuthStateChanged,
 } from "firebase/auth"
+import { getFirestore } from "firebase/firestore"
 
 const app = firebase.initializeApp({
   apiKey: process.env.REACT_APP_API_KEY,
@@ -23,4 +24,7 @@ const auth = {
   getAuth,
   onAuthStateChanged,
 }
-export { firebase, auth }
+
+const db = getFirestore(app)
+
+export { firebase, auth, db }

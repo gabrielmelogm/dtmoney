@@ -1,4 +1,6 @@
+import { collection, getDocs } from "firebase/firestore"
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
+import { db } from "../firebase"
 import { api } from "../services/api"
 
 type Transaction = {
@@ -26,9 +28,20 @@ const Transactions = createContext<TransactionsContextData>({} as TransactionsCo
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [ transactions, setTransactions ] = useState<Transaction[]>([])
 
+  async function getTransactions() {
+    let data: any = []
+    const transactionsList = await getDocs(collection(db, "transactions"))
+    transactionsList.forEach((response) => {
+      const itemId = response.id
+      const itemData = response.data()
+      itemData.id = itemId
+      data.push(itemData)
+    })
+    setTransactions(data)
+  }
+  
   useEffect(() => {
-    api.get("transactions")
-      .then(response => setTransactions(response.data.transactions))
+    getTransactions()
   }, [])
 
   async function createTransaction(transactionInput: TransactionInput) {
