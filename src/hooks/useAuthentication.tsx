@@ -4,6 +4,7 @@ import { auth } from "../firebase"
 type AuthenticationProps = {
   LogInWithGoogle: () => Promise<void>
   LogInWithGitHub: () => Promise<void>
+  signOut: () => Promise<void>
   isLogin: boolean
 }
 
@@ -38,6 +39,11 @@ export function AuthenticationProvider({children}: AuthenticationProviderProps) 
       return user
     })
   }
+
+  async function signOut() {
+    await auth.signOut(auth.getAuth())
+    return setIsLogin(false)
+  }
   
   async function verifyIsLogin() {
     try {
@@ -57,7 +63,7 @@ export function AuthenticationProvider({children}: AuthenticationProviderProps) 
   }, [])
 
   return (
-    <Authentication.Provider value={{ LogInWithGoogle, LogInWithGitHub, isLogin }}>
+    <Authentication.Provider value={{ LogInWithGoogle, LogInWithGitHub, isLogin, signOut }}>
       {children}
     </Authentication.Provider>
   )

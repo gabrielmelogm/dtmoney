@@ -5,6 +5,7 @@ import {
   signInWithPopup,
   getAuth,
   onAuthStateChanged,
+  signOut,
 } from "firebase/auth"
 import { getFirestore } from "firebase/firestore"
 
@@ -23,6 +24,7 @@ const auth = {
   signInWithPopup,
   getAuth,
   onAuthStateChanged,
+  signOut,
 }
 
 const db = getFirestore(app)
