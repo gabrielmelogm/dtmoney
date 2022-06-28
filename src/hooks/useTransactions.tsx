@@ -1,4 +1,6 @@
+import { addDoc, collection, getDocs } from "firebase/firestore"
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
+import { auth, db } from "../firebase"
 import { api } from "../services/api"
 
 type Transaction = {
@@ -8,6 +10,7 @@ type Transaction = {
   category: string
   amount: number
   createdAt: string
+  userEmail?: string
 }
 
 type TransactionInput = Omit<Transaction, 'id' | 'createdAt'>
@@ -26,15 +29,33 @@ const Transactions = createContext<TransactionsContextData>({} as TransactionsCo
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [ transactions, setTransactions ] = useState<Transaction[]>([])
 
+  async function getTransactions() {
+    let data: any = []
+    const transactionsList = await getDocs(collection(db, "transactions"))
+    transactionsList.forEach((response) => {
+      const itemId = response.id
+      const itemData = response.data()
+      itemData.id = itemId
+      if (itemData.userEmail === `${auth.getAuth().currentUser?.email}`) return data.push(itemData)
+    })
+    setTransactions(data)
+  }
+  
   useEffect(() => {
-    api.get("transactions")
-      .then(response => setTransactions(response.data.transactions))
+    getTransactions()
   }, [])
 
   async function createTransaction(transactionInput: TransactionInput) {
-    const response = await api.post("/transactions", {...transactionInput, createdAt: new Date()})
-    const { transaction } = response.data
-    setTransactions([...transactions, transaction])
+    const createAt = new Date()
+    await addDoc(collection(db, "transactions"), {
+      title: transactionInput.title,
+      type: transactionInput.type,
+      category: transactionInput.category,
+      amount: transactionInput.amount,
+      createdAt: `${createAt}`,
+      userEmail: auth.getAuth().currentUser?.email
+    })
+    await getTransactions()
   }
 
   return (
