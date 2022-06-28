@@ -1,6 +1,6 @@
-import { collection, getDocs } from "firebase/firestore"
+import { addDoc, collection, getDocs } from "firebase/firestore"
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
-import { db } from "../firebase"
+import { auth, db } from "../firebase"
 import { api } from "../services/api"
 
 type Transaction = {
@@ -10,6 +10,7 @@ type Transaction = {
   category: string
   amount: number
   createdAt: string
+  userEmail?: string
 }
 
 type TransactionInput = Omit<Transaction, 'id' | 'createdAt'>
@@ -45,9 +46,16 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   }, [])
 
   async function createTransaction(transactionInput: TransactionInput) {
-    const response = await api.post("/transactions", {...transactionInput, createdAt: new Date()})
-    const { transaction } = response.data
-    setTransactions([...transactions, transaction])
+    const createAt = new Date()
+    await addDoc(collection(db, "transactions"), {
+      title: transactionInput.title,
+      type: transactionInput.type,
+      category: transactionInput.category,
+      amount: transactionInput.amount,
+      createdAt: `${createAt}`,
+      userEmail: auth.getAuth().currentUser?.email
+    })
+    await getTransactions()
   }
 
   return (
