@@ -1,7 +1,7 @@
 import { addDoc, collection, getDocs } from "firebase/firestore"
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
 import { auth, db } from "../firebase"
-import { api } from "../services/api"
+import { useAuthentication } from "./useAuthentication"
 
 type Transaction = {
   id: number
@@ -29,6 +29,8 @@ const Transactions = createContext<TransactionsContextData>({} as TransactionsCo
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [ transactions, setTransactions ] = useState<Transaction[]>([])
 
+  const { isLogin } = useAuthentication()
+
   async function getTransactions() {
     let data: any = []
     const transactionsList = await getDocs(collection(db, "transactions"))
@@ -43,7 +45,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   
   useEffect(() => {
     getTransactions()
-  }, [])
+  }, [isLogin])
 
   async function createTransaction(transactionInput: TransactionInput) {
     const createAt = new Date()
