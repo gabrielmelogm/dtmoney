@@ -92,6 +92,12 @@ export const Container = styled.div`
         right: -1rem;
       }
 
+      @media (max-width: 1600px) {
+        img {
+          max-width: 600px;
+        }
+      }
+
       p {
         display: inline-block;
         margin-top: 13rem;
