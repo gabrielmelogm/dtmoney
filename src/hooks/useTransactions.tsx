@@ -44,7 +44,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   }
   
   useEffect(() => {
-    getTransactions()
+    if (isLogin) getTransactions()
   }, [isLogin])
 
   async function createTransaction(transactionInput: TransactionInput) {

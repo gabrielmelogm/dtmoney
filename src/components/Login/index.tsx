@@ -4,7 +4,8 @@ import logoImg from "../../assets/logo-only.svg"
 import googleImg from "../../assets/logo-google.svg"
 import githubImg from "../../assets/logo-github.svg"
 import { useAuthentication } from "../../hooks/useAuthentication";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { notify } from "../../services/notify";
 
 type LoginProps = {
   setLogIn: (value: boolean) => void
@@ -15,6 +16,7 @@ export function Login({ setLogIn }: LoginProps) {
 
   useEffect(() => {
     setLogIn(isLogin)
+    if (isLogin) return notify({ message: "Login feito com sucesso!", type: "success" })
   }, [isLogin])
 
   return (

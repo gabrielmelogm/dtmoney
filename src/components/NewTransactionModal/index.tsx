@@ -6,6 +6,7 @@ import closeImg from "../../assets/close.svg"
 import incomeImg from "../../assets/income.svg"
 import outcomeImg from "../../assets/outcome.svg"
 import { useTransactions } from "../../hooks/useTransactions"
+import { notify } from "../../services/notify"
 
 type NewTransactionModalProps = {
   isOpen: boolean
@@ -20,15 +21,20 @@ export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionMo
   const [ category, setCategory] = useState("")
   const [ type, setType ] = useState("deposit")
 
+  const [ loading, setLoading ] = useState(false)
+
   async function handleCreateNewTransaction(event: FormEvent) {
     event.preventDefault()
     try {
+      setLoading(true)
       const data = { title, amount, category, type }
       await createTransaction(data)
       setTitle("")
       setCategory("")
       setType("deposit")
       setAmount(0)
+      setLoading(false)
+      notify({ message: "Transação cadastrada com sucesso!", type: "success" })
       return onRequestClose()
     } catch (error) {
       console.log(error)
@@ -57,12 +63,14 @@ export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionMo
           placeholder="Título"
           value={title}
           onChange={({target}) => setTitle(target.value)}
+          required
         />
         <input
           type="number"
           placeholder="Valor"
           value={amount}
           onChange={({target}) => setAmount(Number(target.value))}
+          required
         />
 
         <TransactionTypeContainer>
@@ -91,9 +99,13 @@ export function NewTransactionModal({ isOpen, onRequestClose }: NewTransactionMo
           placeholder="Categoria"
           value={category}
           onChange={({target}) => setCategory(target.value)}
+          required
         />
 
-        <button type="submit">
+        <button
+          type="submit"
+          disabled={loading}
+        >
           Cadastrar
         </button>
       </Container>

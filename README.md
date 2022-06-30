@@ -24,3 +24,4 @@ yarn start
 - Axios
 - React-modal
 - Polished
+- React-toastify

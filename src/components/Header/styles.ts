@@ -34,14 +34,28 @@ export const Content = styled.div`
       }
     }
 
-    img {
+    .logout {
       width: 3rem;
       height: 3rem;
       border-radius: 50%;
+      z-index: 1;
 
       &:hover {
-        filter: brightness(0.9);
+        background-image: url("logout.svg");
+        background-size: 1.5rem;
+        background-repeat: no-repeat;
+        background-position: 0.8rem;
         cursor: pointer;
+      }
+
+      img {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+
+        &:hover {
+          opacity: 0.2;
+        }
       }
     }
   }
