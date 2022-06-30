@@ -37,6 +37,7 @@ export const Content = styled.div`
     img {
       width: 3rem;
       height: 3rem;
+      border-radius: 50%;
 
       &:hover {
         filter: brightness(0.9);
