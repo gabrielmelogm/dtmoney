@@ -27,11 +27,15 @@ export function Header({ onOpenNewTransactionModal }: HeaderProps) {
           >
             Nova transação
           </button>
-          <img 
-            src={`${auth.getAuth().currentUser?.photoURL}`}
-            alt="Foto de perfil"
+          <div
             onClick={logOut}
-          />
+            className="logout"
+          >
+            <img 
+              src={`${auth.getAuth().currentUser?.photoURL}`}
+              alt="Foto de perfil"
+            />
+          </div>
         </div>
         
       </Content>

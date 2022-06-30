@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
 import { auth } from "../firebase"
+import { notify } from "../services/notify"
 
 type AuthenticationProps = {
   LogInWithGoogle: () => Promise<void>
@@ -32,12 +33,17 @@ export function AuthenticationProvider({children}: AuthenticationProviderProps) 
   async function LogInWithGitHub() {
     const provider = new auth.GithubAuthProvider()
     const authProps = auth.getAuth()
-    auth.signInWithPopup(authProps, provider).then((res) => {
-      const credential = auth.GithubAuthProvider.credentialFromResult(res)
-      const user = res.user
-      setIsLogin(true)
-      return user
-    })
+    auth.signInWithPopup(authProps, provider)
+      .then((res) => {
+        const credential = auth.GithubAuthProvider.credentialFromResult(res)
+        const user = res.user
+        setIsLogin(true)
+        return user
+      })
+      .catch((error) => {
+        const identifyIfOtherLoginMethod = `${error}`.includes("(auth/account-exists-with-different-credential)")
+        if (identifyIfOtherLoginMethod) return notify({ message: "Existe outro método de login já cadastrado", type: "error" })
+      })
   }
 
   async function signOut() {

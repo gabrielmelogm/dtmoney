@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Modal from "react-modal";
 import { Dashboard } from "./components/Dashboard";
 import { Header } from "./components/Header";
@@ -7,6 +7,8 @@ import { NewTransactionModal } from "./components/NewTransactionModal";
 import { TransactionsProvider } from "./hooks/useTransactions";
 import { AuthenticationProvider } from "./hooks/useAuthentication";
 import { GlobalStyle } from "./styles/global";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 Modal.setAppElement("#root")
 
@@ -38,6 +40,7 @@ export function App() {
             )
         }
         <GlobalStyle />
+        <ToastContainer />
       </TransactionsProvider>
     </AuthenticationProvider>
   );
