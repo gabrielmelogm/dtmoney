@@ -38,7 +38,6 @@ export const Content = styled.div`
       width: 3rem;
       height: 3rem;
       border-radius: 50%;
-      z-index: 1;
 
       &:hover {
         background-image: url("logout.svg");
