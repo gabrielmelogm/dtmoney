@@ -41,8 +41,10 @@ export function Login({ setLogIn }: LoginProps) {
           </div>
         </div>
         <div className="welcome">
-          <img src="background-login.png" alt="Imagem de fundo" />
-          <p>Gerencie suas <br />finanças</p>
+          <div className="main-information">
+            <img src="background-login.png" alt="Imagem de fundo" />
+            <p>Gerencie suas <br />finanças</p>
+          </div>
           <div className="footer-information">
             <span>briefing: rocketseat</span>
             <span>develop: gabrielmelogm</span>

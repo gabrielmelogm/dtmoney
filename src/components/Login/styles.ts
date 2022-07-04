@@ -84,27 +84,38 @@ export const Container = styled.div`
       align-items: center;
       height: 100vh;
 
-      img {
-        position: absolute;
-        max-width: 750px;
+      .main-information {
         width: 100%;
-        top: 6rem;
-        right: -1rem;
-      }
+        height: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
 
-      @media (max-width: 1600px) {
         img {
-          max-width: 600px;
+          margin-top: 5rem;
+          position: absolute;
+          max-width: 750px;
+          width: 100%;
+          right: -1rem;
+          top: 1rem;
         }
-      }
 
-      p {
-        display: inline-block;
-        margin-top: 13rem;
-        font-size: 3rem;
-        font-weight: 700;
-        color: var(--shape);
-        text-align: center;
+        @media (max-width: 1600px) {
+          img {
+            max-width: 600px;
+          }
+        }
+
+        p {
+          display: inline-block;
+          margin-top: 12rem;
+          font-size: 3rem;
+          font-weight: 700;
+          color: var(--shape);
+          text-align: center;
+        }
       }
 
       .footer-information {
