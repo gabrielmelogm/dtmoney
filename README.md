@@ -12,9 +12,15 @@
 yarn start
 ```
 
+## 🐳 Run with docker
+```bash
+yarn up
+```
+
 ## 🚀 Stacks
 - React
 - Styled-components
+- Docker
 
 ## ⚙️ Tools
 - Firebase
