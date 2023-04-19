@@ -1,23 +1,28 @@
 import { Container } from "./styles";
+import { useAuthentication } from "../../hooks/useAuthentication";
+import { notify } from "../../services/notify";
+
+import { useForm } from "react-hook-form"
+import { useEffect } from "react";
 
 import logoImg from "../../assets/logo-only.svg"
-import googleImg from "../../assets/logo-google.svg"
-import githubImg from "../../assets/logo-github.svg"
-import { useAuthentication } from "../../hooks/useAuthentication";
-import { useEffect } from "react";
-import { notify } from "../../services/notify";
 
 type LoginProps = {
   setLogIn: (value: boolean) => void
 }
 
 export function Login({ setLogIn }: LoginProps) {
-  const { LogInWithGoogle, LogInWithGitHub, isLogin } = useAuthentication()
+  const { LogIn, isLogin } = useAuthentication()
+  const { register, handleSubmit } = useForm()
 
   useEffect(() => {
     setLogIn(isLogin)
     if (isLogin) return notify({ message: "Login feito com sucesso!", type: "success" })
   }, [isLogin])
+
+  async function handleSignIn(data: any) {
+    LogIn(data.username, data.password)
+  }
 
   return (
     <Container>
@@ -29,16 +34,23 @@ export function Login({ setLogIn }: LoginProps) {
           </div>
           <h2>Login</h2>
           <h3>Escolha como fazer login</h3>
-          <div className="content-button">
-            <button onClick={LogInWithGoogle}>
-              <img src={googleImg} alt="Logo google" />
-              <span>Entrar com Google</span>
-            </button>
-            <button onClick={LogInWithGitHub}>
-              <img src={githubImg} alt="Logo github" />
-              <span>Entrar com GitHub</span>
-            </button>
-          </div>
+          <form onSubmit={handleSubmit(handleSignIn)}>
+            <div className="content-inputs">
+              <input
+                {...register('username')}
+                type="text"
+                name="username"
+                placeholder="Usuário"
+              />
+              <input
+                {...register('password')}
+                type="password"
+                name="password"
+                placeholder="Senha"
+              />
+              <button type="submit">Login</button>
+            </div>
+          </form>
         </div>
         <div className="welcome">
           <div className="main-information">

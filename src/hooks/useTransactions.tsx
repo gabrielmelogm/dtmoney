@@ -1,16 +1,16 @@
-import { addDoc, collection, getDocs } from "firebase/firestore"
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
-import { auth, db } from "../firebase"
 import { useAuthentication } from "./useAuthentication"
+import { api } from "../common/api"
+import Cookies from "js-cookie"
 
 type Transaction = {
-  id: number
+  id: string
   title: string
   type: string
   category: string
   amount: number
   createdAt: string
-  userEmail?: string
+  userId?: string
 }
 
 type TransactionInput = Omit<Transaction, 'id' | 'createdAt'>
@@ -29,18 +29,33 @@ const Transactions = createContext<TransactionsContextData>({} as TransactionsCo
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [ transactions, setTransactions ] = useState<Transaction[]>([])
 
-  const { isLogin } = useAuthentication()
+  const { isLogin, user } = useAuthentication()
 
   async function getTransactions() {
-    let data: any = []
-    const transactionsList = await getDocs(collection(db, "transactions"))
-    transactionsList.forEach((response) => {
-      const itemId = response.id
-      const itemData = response.data()
-      itemData.id = itemId
-      if (itemData.userEmail === `${auth.getAuth().currentUser?.email}`) return data.push(itemData)
+    const token = Cookies.get('dtmoney.token')
+
+    return await api.get(`/transactions/${user?.sub}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-    setTransactions(data)
+      .then((response) => {
+        let data: any = []
+
+        response.data.map((transaction: any) => {
+          data.push({
+            id: transaction.id,
+            title: transaction.title,
+            type: transaction.type,
+            category: transaction.category,
+            amount: parseFloat(transaction.amount),
+            createdAt: transaction.createAt,
+            userId: transaction.userId,
+          })
+        })
+        setTransactions(data)
+      })
+      .catch((error) => console.error(error))
   }
   
   useEffect(() => {
@@ -48,16 +63,26 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   }, [isLogin])
 
   async function createTransaction(transactionInput: TransactionInput) {
-    const createAt = new Date()
-    await addDoc(collection(db, "transactions"), {
-      title: transactionInput.title,
-      type: transactionInput.type,
-      category: transactionInput.category,
-      amount: transactionInput.amount,
-      createdAt: `${createAt}`,
-      userEmail: auth.getAuth().currentUser?.email
-    })
-    await getTransactions()
+    const token = Cookies.get('dtmoney.token')
+
+    if (token) {
+      await api.post('/transactions', {
+          title: transactionInput.title,
+          category: transactionInput.category,
+          type: transactionInput.type,
+          amount: transactionInput.amount,
+          createdAt: new Date().toISOString(),
+          userId: user?.sub,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      
+      return await getTransactions()
+    }
   }
 
   return (

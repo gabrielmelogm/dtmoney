@@ -46,26 +46,39 @@ export const Container = styled.div`
         color: var(--text-title);
       }
 
-      .content-button {
+      .content-inputs {
         margin-top: 2rem;
         display: flex;
         flex-direction: column;
         gap: 1rem;
 
+        input {
+          all: unset;
+          padding: 8px 16px;
+          border-radius: 8px;
+          border: 2px solid #d6d6d6;
+          color: var(--text-body);
+
+          &:focus {
+            border: 2px solid var(--blue);
+          }
+        }
+
         button {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 1rem;
-          background: transparent;
-          border: 2px solid #d6d6d6;
-          border-radius: 0.25rem;
-          height: 4rem;
-
+          background: var(--blue);
+          border: 1px solid #d6d6d6;
+          border-radius: 8px;
+          height: 48px;
+          font-size: medium;
+          font-weight: 500;
+          color: var(--shape);
           transition: border-color 0.2s;
 
           &:hover {
-            border-color: ${darken(0.1, "#d7d7d7")};
+            background: ${darken(0.1, "#5429cc")};
           }
 
           span {

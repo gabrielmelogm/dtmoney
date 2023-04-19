@@ -1,12 +1,22 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
-import { auth } from "../firebase"
-import { notify } from "../services/notify"
+
+import Cookies from "js-cookie"
+import axios from "axios"
+import decode from "jwt-decode"
+import { api } from "../common/api"
+
+interface UserPayload {
+  sub: string
+  email: string
+  username: string
+  iat: number
+  exp: number
+}
 
 type AuthenticationProps = {
-  LogInWithGoogle: () => Promise<void>
-  LogInWithGitHub: () => Promise<void>
-  signOut: () => Promise<void>
+  LogIn: (username: string, password: string) => Promise<void>
   isLogin: boolean
+  user: UserPayload | null
 }
 
 type AuthenticationProviderProps = {
@@ -16,60 +26,50 @@ type AuthenticationProviderProps = {
 const Authentication = createContext({} as AuthenticationProps)
 
 export function AuthenticationProvider({children}: AuthenticationProviderProps) {
-  const [ isLogin, setIsLogin ] = useState(false)
-  
-  async function LogInWithGoogle() {
-    const provider = new auth.GoogleAuthProvider()
-    const authProps = auth.getAuth()
-  
-    auth.signInWithPopup(authProps, provider).then((res) => {
-      const credential = auth.GoogleAuthProvider.credentialFromResult(res)
-      const user = res.user
-      setIsLogin(true)
-      return user
-    })
-  }
-  
-  async function LogInWithGitHub() {
-    const provider = new auth.GithubAuthProvider()
-    const authProps = auth.getAuth()
-    auth.signInWithPopup(authProps, provider)
-      .then((res) => {
-        const credential = auth.GithubAuthProvider.credentialFromResult(res)
-        const user = res.user
-        setIsLogin(true)
-        return user
-      })
-      .catch((error) => {
-        const identifyIfOtherLoginMethod = `${error}`.includes("(auth/account-exists-with-different-credential)")
-        if (identifyIfOtherLoginMethod) return notify({ message: "Existe outro método de login já cadastrado", type: "error" })
-      })
-  }
+  const [ user, setUser ] = useState<UserPayload | null>(null)
 
-  async function signOut() {
-    await auth.signOut(auth.getAuth())
-    return setIsLogin(false)
-  }
-  
-  async function verifyIsLogin() {
-    try {
-      const getUser = await new Promise((resolve) => auth.onAuthStateChanged(auth.getAuth(), (user) => resolve(user)))
-      if (getUser) {
-        return setIsLogin(true)
-      } else {
-        return setIsLogin(false)
-      }
-    } catch (error) {
-      return setIsLogin(false)
-    } 
-  }
+  const isLogin = !!user
 
   useEffect(() => {
-    verifyIsLogin()
+    validateUser()
   }, [])
 
+  async function LogIn(username: string, password: string) {
+    return await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, { username, password })
+      .then(({data}) => {
+        if (data.token) {
+          Cookies.set('dtmoney.token', data.token)
+          setUser(decode(data.token))
+        }
+      })
+      .catch((error) => console.error(error))
+  }
+
+  async function validateUser() {
+    const token = Cookies.get('dtmoney.token')
+
+    let getUser: any
+    if (token) {
+      getUser = decode(token)
+    }
+
+    if (getUser) {
+      return await api.get(`/users/${getUser.username}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => {
+          if (response.data?.id) {
+            setUser(getUser)
+          }
+        })
+        .catch((error) => setUser(null))
+    }
+  }
+
   return (
-    <Authentication.Provider value={{ LogInWithGoogle, LogInWithGitHub, isLogin, signOut }}>
+    <Authentication.Provider value={{ LogIn, isLogin, user }}>
       {children}
     </Authentication.Provider>
   )
