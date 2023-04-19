@@ -1,3 +1,9 @@
+# VERSÃO 3.0
+Refatora módulo para api própria
+
+## ⚙️ Refact login
+- Login via username e password
+
 # VERSÃO 2.4
 Adicionado microinterações e notificações em toda aplicação
 

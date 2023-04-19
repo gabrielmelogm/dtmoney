@@ -1,5 +1,4 @@
 import logoImg from "../../assets/logo.svg"
-import { auth } from "../../firebase"
 import { useAuthentication } from "../../hooks/useAuthentication"
 import { Container, Content } from "./styles"
 
@@ -9,10 +8,10 @@ type HeaderProps = {
 
 export function Header({ onOpenNewTransactionModal }: HeaderProps) {
 
-  const { signOut } = useAuthentication()
+  // const { signOut } = useAuthentication()
 
   function logOut() {
-    signOut()
+    // signOut()
     document.location.reload()
   }
 
@@ -31,10 +30,10 @@ export function Header({ onOpenNewTransactionModal }: HeaderProps) {
             onClick={logOut}
             className="logout"
           >
-            <img 
+            {/* <img 
               src={`${auth.getAuth().currentUser?.photoURL}`}
               alt="Foto de perfil"
-            />
+            /> */}
           </div>
         </div>
         
